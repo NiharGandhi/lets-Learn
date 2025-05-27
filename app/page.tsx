@@ -4,12 +4,16 @@ import CompanionCard from '@/components/CompanionCard';
 import CompanionsList from '@/components/CompanionsList';
 import { recentSessions } from '@/constants';
 import Cta from '@/components/CTA';
-import { getAllCompanions, getRecentSessions } from '@/lib/actions/companion.actions';
+import { getAllCompanions, getRecentSessions, getBookmarkStatuses } from '@/lib/actions/companion.actions';
 import { getSubjectColor } from '@/lib/utils';
 
 const Page = async () => {
   const companions = await getAllCompanions({ limit: 3 });
   const recentSessionsCompanions = await getRecentSessions(10);
+  const bookmarkStatuses = await getBookmarkStatuses(
+    companions.map(c => c.id)
+  );
+  
 
   return (
     <main>
@@ -23,6 +27,7 @@ const Page = async () => {
                     key={companion.id}
                     {...companion}
                     color={getSubjectColor(companion.subject)}
+                    bookmarked={!!bookmarkStatuses[companion.id]}
                 />
             ))}
 

@@ -1,7 +1,7 @@
 import CompanionCard from "@/components/CompanionCard";
 import SearchInput from "@/components/SearchInput";
 import SubjectFilter from "@/components/SubjectFilter";
-import { getAllCompanions } from "@/lib/actions/companion.actions";
+import { getAllCompanions, getBookmarkStatuses } from "@/lib/actions/companion.actions";
 import { getSubjectColor } from "@/lib/utils";
 
 const CompanionsLibrary = async ({ searchParams }: SearchParams) => {
@@ -15,6 +15,9 @@ const CompanionsLibrary = async ({ searchParams }: SearchParams) => {
     topic 
   });
 
+  const bookmarkStatuses = await getBookmarkStatuses(
+    companions.map(c => c.id)
+  );
 
 
   return (
@@ -32,6 +35,7 @@ const CompanionsLibrary = async ({ searchParams }: SearchParams) => {
             key={companion.id} 
             { ...companion } 
             color={getSubjectColor(companion.subject)}
+            bookmarked={!!bookmarkStatuses[companion.id]}
           />
         ))}
       </section>
